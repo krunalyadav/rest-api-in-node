@@ -1,7 +1,7 @@
 "use strict";
 var itemController = require("../controllers/itemController");
 
-module.exports = function(app) {
+module.exports = app => {
   app
     .route("/api/items")
     .get(itemController.getAllItems) // route to get all items

@@ -7,10 +7,9 @@ var express = require("express"),
   port = process.env.PORT || 8080,
   cors = require("cors");
 
-mongoose.connect(
-  "mongodb://krunal:yadav@ds239965.mlab.com:39965/krunaldb",
-  { useMongoClient: true }
-);
+mongoose.connect("mongodb://<dbuser>:<dbpassword>@ds133657.mlab.com:33657/<dbname>", {
+  useMongoClient: true
+});
 var connection = mongoose.connection;
 connection.on(
   "error",
@@ -30,13 +29,13 @@ app.use(cors());
 routes(app);
 
 // handle not found route
-app.use(function(req, res) {
+app.use((req, res) => {
   res.status(404).send({
     url: req.originalUrl + " not found"
   });
 });
 
 // binds and listens for connections on specified host and port
-var server = app.listen(port, function() {
+var server = app.listen(port, () => {
   console.log("Server listens at: " + server.address().port);
 });
