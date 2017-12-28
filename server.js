@@ -2,10 +2,11 @@ var express = require("express"),
   mongoose = require("mongoose"),
   Item = require("./api/models/itemModel"),
   bodyParser = require("body-parser"),
-  app = express(),
   routes = require("./api/routes/itemRoutes"),
-  port = process.env.PORT || 8080,
   cors = require("cors");
+
+var app = express(),
+  port = process.env.PORT || 8080;
 
 mongoose.connect("mongodb://<dbuser>:<dbpassword>@ds133657.mlab.com:33657/<dbname>", {
   useMongoClient: true
