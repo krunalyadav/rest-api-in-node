@@ -73,7 +73,7 @@ Here we have installed five packages. Their details are as below.
 * **[body-parser](https://github.com/expressjs/body-parser)** - It is a body parsing middleware. It parses the incoming request bodies in a middleware before your handlers and makes them available under the `body` property of `request` object. i.e. `req.body`.
 * **[cors](https://github.com/expressjs/cors)** - It is a node.js package which allows a cross-domain to consume our REST APIs. It can be used to enable [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) with various options.
 
-Now let's create our `server.js` file, which is used to configure our application. The initial content of the file is as below.
+Now let's create our `server.js` file at the root of the project, which is used to configure our application. The initial content of the file is as below.
 
 # server.js
 
@@ -89,3 +89,23 @@ var server = app.listen(port, () => {
 ```
 
 Here we are importing the express module and creating the server. Our server will receive requests on either 8080 or the one we specify in `PORT` environment variable. Now navigate to the terminal and run the command `node server.js`. You will see `Server listens at: 8080` message on the command line.
+
+Now lets create an api folder by running `mkdir api` command in command line terminal. After that create three separate folders named models, controllers, and routes by running command `mkdir api\models api\controllers api\routes`.
+
+Create an `itemModel.js` file inside folder `api\models` and paste the below content in it.
+
+```javascript
+"use strict";
+
+var mongoose = require("mongoose"),
+  Schema = mongoose.Schema;
+
+//model schema
+var Item = new Schema({
+  name: String,
+  stock: Number
+});
+
+exports = mongoose.model("Items", Item);
+```
+
