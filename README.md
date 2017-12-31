@@ -228,3 +228,76 @@ exports.deleteItem = (req, res) => {
   );
 };
 ```
+
+Here we are importing `mongoose` package and `Item` model schema from mongoose. We are exporting a couple of functions. Explanation of each function in details is as below.
+
+* `getAllItems`: Here we are receiving two parameters in a function. One is `request` object and the other is `response` object. In Item schema, we are calling [find](http://mongoosejs.com/docs/api.html#model_Model.find) method to find items. Here we are passing an empty object, no specific filter criteria. So we will get all items in array form in response. In the callback function, we are also passing two parameters. First one is error object and the second one is item object. If there is an error in fetching all items then error object will contain the error message, that we have checked in subsequent statements. So, if a callback function has an error in fetching the items, we will return an error in response else items list in response. 
+
+* `addItem`: In this function same as described previously we are receiving two objects `request` and `response` as a parameter. Here we are creating a new Item with the value passed in the body of the request object. Thanks to body-parser we are able to receive posted item in `req.body` object. After creating new Item we are calling `save` method to save the details into MongoDB database. The callback function of `save` method will receive two objects error and item(which is saved) in parameter and based on the respective value we are sending the item or error in response to the client.
+
+* `getItem`: In this function we are getting the `itemId` from `req.params` object. Then we are using [findById](http://mongoosejs.com/docs/api.html#model_Model.findById), which will return us the Item with specific id if it exists else an empty object. 
+
+* `updateItem`: Here we are calling [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findById) method of model, in which we are passing `itemId`, `req.body` which will contain the item with new values that are required to update in database, `{ new: true}` the value of new is false by default but if we want to get the updated item in response then we have to set the value of new to true, callback function which will contain error and newly updated item object and send it to database respectively.
+
+* `deleteItem`: Here we are calling the remove method of a model and passing the `itemId` in order to specify which item to remove. Here in a callback function, we are passing a message on successful deletion of Item else we are sending an error to the client.
+
+# Connecting the dots
+
+Now let's connect the dots and put everything together. We have created our Model, defined our Routes and created our handler functions. Now is the time to put all them together. Let's navigate to `server.js` file and modified it as mentioned below.
+
+```javascript
+var express = require("express"),
+  mongoose = require("mongoose"),
+  Item = require("./api/models/itemModel"),
+  bodyParser = require("body-parser"),
+  routes = require("./api/routes/itemRoutes"),
+  cors = require("cors");
+
+var app = express(),
+  port = process.env.PORT || 8080;
+
+mongoose.connect("mongodb://<dbuser>:<dbpassword>@ds133657.mlab.com:33657/<dbname>", {
+  useMongoClient: true
+});
+var connection = mongoose.connection;
+connection.on(
+  "error",
+  console.error.bind(console, "There is a problem while connecting MongoDB")
+);
+
+// create application/x-www-form-urlencoded parser
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// parse application/json
+app.use(bodyParser.json());
+
+// for cross-origin resource sharing, used when you are consuming APIs from cross domain
+app.use(cors());
+
+//setup routes
+routes(app);
+
+// handle not found route
+app.use((req, res) => {
+  res.status(404).send({
+    url: req.originalUrl + " not found"
+  });
+});
+
+// binds and listens for connections on specified host and port
+var server = app.listen(port, () => {
+  console.log("Server listens at: " + server.address().port);
+});
+```
+
+Here we are importing `mongoose`, `body-parser` and `cors` package and we are also importing our `Item` model and our routes. Here I have used `mLab` instead of local machine's mongo instance. If you want to know more about it then please visit [here](https://mlab.com/). 
+
+Here we are connecting to MongoDB server and if we face any issues we are printing the error message on the console. 
+
+After that, we are binding `body-parser` and `cors` middleware into the app object. Then we are registering our routes.
+
+We are also binding middleware to handle 404 requests on the server. So if some unknown route gets hit the client will get the 404 status code and message that the requested route did not find.
+
+Our application was in running mode and special thanks to `nodemon` we do not have to stop the server to reflect the new changes. 
+
+Now, let's test our APIs using `Postman`.
