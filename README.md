@@ -301,3 +301,45 @@ We are also binding middleware to handle 404 requests on the server. So if some 
 Our application was in running mode and special thanks to `nodemon` we do not have to stop the server to reflect the new changes. 
 
 Now, let's test our APIs using `Postman`.
+
+# Testing via Postman
+
+Now open your postman, enter the URL `http://localhost:8080/api/items` and press enter.
+
+![get all item](https://user-images.githubusercontent.com/16562273/34460295-f83ad75c-ee2f-11e7-9c8f-4c74fc460a91.png)
+
+Here you can see "[]" empty array as there no item exist in the database yet. Now, let's add our first item. On the same address, change method to `POST`, click on `Body` and select `raw` checkbox. When you select `raw`, you will have a couple of options available on the right side in the drop-down. From that select `JSON(application/json)` and then add the `name` and `stock` in JSON form as shown below.
+
+![post an item](https://user-images.githubusercontent.com/16562273/34460334-2c3add8a-ee31-11e7-9e74-e03a5644eaca.png)
+
+After that press enter and you will see newly created Item in Body section as shown in below image.
+
+![post an item](https://user-images.githubusercontent.com/16562273/34460349-8813129e-ee31-11e7-9296-974eaed678f1.png)
+
+Now the same way we will add another Item with name `Item-2` and then we will change the method to `GET` and hit the same URL. Now we will able to see two items that we just added.
+
+![get all item](https://user-images.githubusercontent.com/16562273/34460371-0345a968-ee32-11e7-96b9-c139a9e25f5a.png)
+
+If we want to get only one item then we have to add `itemId` at the end of URL. So, we will change the URL to get the single Item to `http://localhost:8080/api/items/5a489d269eff972664524610` and press enter. You will see single Item in Body section as shown below.
+
+![get single item](https://user-images.githubusercontent.com/16562273/34461481-3238da96-ee51-11e7-87b1-f449539cd104.png)
+
+Now we will update the Item. For that change the method to `PUT` and update the request parameters in a body as shown below.
+
+![put item](https://user-images.githubusercontent.com/16562273/34461487-8694346e-ee51-11e7-930b-cf8fd2de5687.png)
+
+Now when we press enter the item will be updated and we will get the updated item in response as shown below.
+
+![put item](https://user-images.githubusercontent.com/16562273/34461492-b622646c-ee51-11e7-9620-c3013bb5f2ac.png)
+
+Now to delete the item, we just have to change the method to delete and press enter. we will get the response as shown below.
+
+![delete item](https://user-images.githubusercontent.com/16562273/34461500-e9ef0ce6-ee51-11e7-9c12-e10acef1e23d.png)
+
+So, this way we can perform CRUD operations in REST APIs in Node.js. I hope you enjoyed this tutorial. If you found anything wrong and if you want to improve this tutorial, kindly submit a PR and make this tutorial better.
+
+If you like this tutorial then please star this GitHub repository and if you face any trouble implementing this code then please create an Issue in this repository.
+
+Thank you very much for reading this tutorial. 
+
+Happy Coding...!!
