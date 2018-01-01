@@ -68,10 +68,10 @@ npm install express nodemon mongoose body-parser cors --save
 
 Here we have installed five packages. Their details are as below.
 * **[express](https://expressjs.com/)** - Express is a minimal and flexible Node.js application framework. It provides a minimal interface to build our application.
-* **[nodemon](https://github.com/remy/nodemon)** - It is used to monitor any changes in already running node.js application and restart the server automatically. So, if we do any changes while the server is running, we do not have to kill the running process and rerun the application again. It will automatically handle by nodemon.
+* **[nodemon](https://github.com/remy/nodemon)** - It is used to monitor any changes in already running Node.js application and restart the server automatically. So, if we do any changes while the server is running, we do not have to kill the running process and rerun the application again. It will automatically handle by nodemon.
 * **[mongoose](http://mongoosejs.com/)** - Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment. It provides a straight-forward, schema-based solution to model your application data. It includes built-in typecasting, validation, query string, business logic hooks and more, out of the box.
 * **[body-parser](https://github.com/expressjs/body-parser)** - It is a body parsing middleware. It parses the incoming request bodies in a middleware before your handlers and makes them available under the `body` property of `request` object. i.e. `req.body`.
-* **[cors](https://github.com/expressjs/cors)** - It is a node.js package which allows a cross-domain to consume our REST APIs. It can be used to enable [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) with various options.
+* **[cors](https://github.com/expressjs/cors)** - It is a Node.js package which allows a cross-domain to consume our REST APIs. It can be used to enable [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) with various options.
 
 Now let's create our `server.js` file at the root of the project, which is used to configure our application. The initial content of the file is as below.
 
@@ -120,6 +120,8 @@ After adding above scripts, our `package.json` file will look as below.
 }
 ```
 
+Now navigate to the terminal and stop the currently running server by pressing `ctrl + c` key. Now type `npm start` and press enter. It will start the server again but the difference is now our nodemon is monitoring changes so we do not have to restart the server again.
+
 Now let's create an api folder by running `mkdir api` command in command line terminal. After that create three separate folders named models, controllers, and routes by running the command `mkdir api\models api\controllers api\routes`.
 
 Create an `itemModel.js` file inside folder `api\models` and paste the below content in it.
@@ -141,7 +143,7 @@ exports = mongoose.model("Items", Item);
 
 You can see that we have imported the `mongoose` package and created an Item schema, which will contain a `name` and `stock` with type `String` and `Number` respectively. 
 
-Now, lets set up the routes for our application. Create and `itemRoutes.js` file inside the `api/routes` folder and paste the following content into it.
+Now, lets set up the routes for our application. Create `itemRoutes.js` file inside the `api/routes` folder and paste the following content into it.
 
 ```javascript
 "use strict";
@@ -167,7 +169,7 @@ As you can see there are two types of routes defined. one is `/api/items` and th
 
 We have defined `GET`, `PUT` and `DELETE` method with route `/api/items/:itemId`. Here `:itemId` is a parameter which will contain the item id of a particular item. Here `GET` method will be used to get a single item from our application, `PUT` method used to update the item details inside our application and `DELETE` method used to delete the item from our application.
 
-Here we are specifying a particular handler function from itemController, which will be called when that particular route will be hit. 
+Here we are specifying a particular handler function from `itemController`, which will be called when that particular route will be hit. 
 
 Now let's create an `itemController.js` file inside `api/controllers` folder and paste the following content into it.
 
@@ -231,13 +233,13 @@ exports.deleteItem = (req, res) => {
 
 Here we are importing `mongoose` package and `Item` model schema from mongoose. We are exporting a couple of functions. Explanation of each function in details is as below.
 
-* `getAllItems`: Here we are receiving two parameters in a function. One is `request` object and the other is `response` object. In Item schema, we are calling [find](http://mongoosejs.com/docs/api.html#model_Model.find) method to find items. Here we are passing an empty object, no specific filter criteria. So we will get all items in array form in response. In the callback function, we are also passing two parameters. First one is error object and the second one is item object. If there is an error in fetching all items then error object will contain the error message, that we have checked in subsequent statements. So, if a callback function has an error in fetching the items, we will return an error in response else items list in response. 
+* `getAllItems`: Here we are receiving two parameters in a function. One is `request` object and the other is `response` object. In Item schema, we are calling [find](http://mongoosejs.com/docs/api.html#model_Model.find) method to find items. Here we are passing an empty object(no specific filter criteria). So we will get all items in array form in response. In the callback function, we are also passing two parameters. First one is error object and the second one is item object. If there is an error in fetching all items then error object will contain the error message, that we have checked in subsequent statements. So, if a callback function has an error in fetching the items, we will return an error in response else items list in response. 
 
 * `addItem`: In this function same as described previously we are receiving two objects `request` and `response` as a parameter. Here we are creating a new Item with the value passed in the body of the request object. Thanks to body-parser we are able to receive posted item in `req.body` object. After creating new Item we are calling `save` method to save the details into MongoDB database. The callback function of `save` method will receive two objects error and item(which is saved) in parameter and based on the respective value we are sending the item or error in response to the client.
 
 * `getItem`: In this function we are getting the `itemId` from `req.params` object. Then we are using [findById](http://mongoosejs.com/docs/api.html#model_Model.findById), which will return us the Item with specific id if it exists else an empty object. 
 
-* `updateItem`: Here we are calling [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findById) method of model, in which we are passing `itemId`, `req.body` which will contain the item with new values that are required to update in database, `{ new: true}` the value of new is false by default but if we want to get the updated item in response then we have to set the value of new to true, callback function which will contain error and newly updated item object and send it to database respectively.
+* `updateItem`: Here we are calling [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findById) method of model, in which we are passing `itemId`, `req.body` which will contain the item with new values that are required to update in database, `{ new: true}` the value of new is false by default but if we want to get the updated item in response then we have to set the value of new to true, callback function which will contain error and newly updated item object and send it to the database respectively.
 
 * `deleteItem`: Here we are calling the remove method of a model and passing the `itemId` in order to specify which item to remove. Here in a callback function, we are passing a message on successful deletion of Item else we are sending an error to the client.
 
@@ -308,7 +310,7 @@ Now open your postman, enter the URL `http://localhost:8080/api/items` and press
 
 ![get all item](https://user-images.githubusercontent.com/16562273/34460295-f83ad75c-ee2f-11e7-9c8f-4c74fc460a91.png)
 
-Here you can see "[]" empty array as there no item exist in the database yet. Now, let's add our first item. On the same address, change method to `POST`, click on `Body` and select `raw` checkbox. When you select `raw`, you will have a couple of options available on the right side in the drop-down. From that select `JSON(application/json)` and then add the `name` and `stock` in JSON form as shown below.
+Here you can see "[]" empty array as there no item exist in the database yet. Now, let's add our first item. On the same address, change method to `POST`, click on `Body` and select `raw` checkbox. When you select `raw`, you will have a couple of options available on the right side in the drop-down, from that select `JSON(application/json)` and then add the `name` and `stock` in JSON form as shown below.
 
 ![post an item](https://user-images.githubusercontent.com/16562273/34460334-2c3add8a-ee31-11e7-9e74-e03a5644eaca.png)
 
