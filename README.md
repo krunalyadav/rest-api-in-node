@@ -237,7 +237,7 @@ Here we are importing `mongoose` package and `Item` model schema from mongoose. 
 
 * `addItem`: In this function same as described previously we are receiving two objects `request` and `response` as a parameter. Here we are creating a new Item with the value passed in the body of the request object. Thanks to body-parser we are able to receive posted item in `req.body` object. After creating new Item we are calling `save` method to save the details into MongoDB database. The callback function of `save` method will receive two objects error and item(which is saved) in parameter and based on the respective value we are sending the item or error in response to the client.
 
-* `getItem`: In this function we are getting the `itemId` from `req.params` object. Then we are using [findById](http://mongoosejs.com/docs/api.html#model_Model.findById), which will return us the Item with specific id if it exists else an empty object. 
+* `getItem`: In this function we are getting the `itemId` from `req.params` object. Then we are using [findById](http://mongoosejs.com/docs/api.html#model_Model.findById), which will return us the Item with specific id if it exists else null. 
 
 * `updateItem`: Here we are calling [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findById) method of model, in which we are passing `itemId`, `req.body` which will contain the item with new values that are required to update in database, `{ new: true}` the value of new is false by default but if we want to get the updated item in response then we have to set the value of new to true, callback function which will contain error and newly updated item object and send it to the database respectively.
 
